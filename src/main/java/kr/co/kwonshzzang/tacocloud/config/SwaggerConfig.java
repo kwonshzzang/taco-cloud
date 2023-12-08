@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Book Manager API 명세서",
+                title = "Taco Cloud API 명세서",
                 description = "API 명세서",
                 version = "v1",
                 contact = @Contact(
@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
                 )
         )
 )
-
 @Configuration
 public class SwaggerConfig {
 }
