@@ -2,16 +2,16 @@ package kr.co.kwonshzzang.tacocloud.controller;
 
 import jakarta.validation.Valid;
 import kr.co.kwonshzzang.tacocloud.domain.Ingredient;
+import kr.co.kwonshzzang.tacocloud.domain.Order;
 import kr.co.kwonshzzang.tacocloud.domain.Taco;
 import kr.co.kwonshzzang.tacocloud.repository.IngredientRepository;
+import kr.co.kwonshzzang.tacocloud.repository.TacoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,20 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/design")
 @RequiredArgsConstructor
+@SessionAttributes("order")
 public class DesignTacoController {
     private final IngredientRepository ingredientRepository;
+    private final TacoRepository tacoRepository;
+
+    @ModelAttribute(name = "order")
+    public Order order(){
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
+    }
 
     @GetMapping
     public String showDesignForm(Model model) {
@@ -40,12 +52,16 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors) {
+    public String processDesign(@Valid Taco design,
+                                Errors errors,
+                                @ModelAttribute Order order) {
         if(errors.hasErrors()) {
             return "design";
         }
-        // 이 지점에서 타코 디자인(선택된 식자재 내역)을 저장한다.
-        // 이 작업은 3장에서 할 것이다.
+
+        Taco taco = tacoRepository.save(design);
+        order.addDesign(taco);
+
         log.info("Processing design: " + design);
         return "redirect:/orders/current";
     }
