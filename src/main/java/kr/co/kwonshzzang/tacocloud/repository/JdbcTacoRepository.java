@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class JdbcTacoRepository implements TacoRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(psc, keyHolder);
 
-        return keyHolder.getKey().longValue();
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     private void saveIngredientToTaco(Ingredient ingredient, long tacoId) {
