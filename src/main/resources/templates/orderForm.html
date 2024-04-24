@@ -17,6 +17,12 @@
     <h3>Your tacos in this order:</h3>
     <a th:href="@{/design}" id="another">Design another taco</a><br/>
 
+    <ui>
+        <li th:each="taco : ${order.tacos}">
+            <span th:text="${taco.name}">taco name</span>
+        </li>
+    </ui>
+
     <!-- end::allButValidation[] -->
     <div th:if="${#fields.hasErrors()}">
         <span class="validationError">
